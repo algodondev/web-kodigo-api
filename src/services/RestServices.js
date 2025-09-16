@@ -74,8 +74,8 @@ export async function loginUsuario(user) {
         const token =new tokens();
         token.Authorization = response.data.token;
         console.log("Token recibido:", token);
-      // Guardar el token en el almacenamiento en sesión
-        sessionStorage.setItem('Token', token.Authorization);
+      // Guardar el token en el almacenamiento local
+        localStorage.setItem('Token', token.Authorization);
       return response.data;
     } else {
       throw new Error(`Error al autenticar usuario: ${response.statusText}`);
