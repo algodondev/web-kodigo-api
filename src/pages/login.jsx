@@ -1,18 +1,15 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 import {loginUsuario} from "../services/RestServices.js";
-import {user} from "../models/ModelApi.js";
 
 function Login() {
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const object = new user();
-
-    async function handleSubmit(event) {
-        event.preventDefault();
+    async function onSubmit(data) {
         try {
-            const data = await loginUsuario(object);
-            console.log("Login exitoso:", data);
-            //para que se redireccione a otra pagina
-            window.location.href = "/dashboard"; 
+            const response = await loginUsuario(data);
+            console.log("Login exitoso:", response);
+            window.location.href = "/dashboard";
         } catch (error) {
             alert("Error en el login: " + error.message);
             console.error("Error en el login:", error);
@@ -22,26 +19,26 @@ function Login() {
     return (
         <div>
             <h2>Login</h2>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="username">Usuario</label>
                     <input
                         type="text"
                         id="username"
-                        name="username"
-                        onChange={(e) => (object.username = e.target.value)}
+                        {...register("username", { required: "El usuario es requerido" })}
                     />
+                    {errors.username && <span style={{color: 'red'}}>{errors.username.message}</span>}
                 </div>
                 <div>
                     <label htmlFor="password">Contraseña</label>
                     <input
                         type="password"
                         id="password"
-                        name="password"
-                        onChange={(e) => (object.password = e.target.value)}
+                        {...register("password", { required: "La contraseña es requerida" })}
                     />
+                    {errors.password && <span style={{color: 'red'}}>{errors.password.message}</span>}
                 </div>
-                <button type="submit" onClick={handleSubmit}>Iniciar Sesión</button>
+                <button type="submit">Iniciar Sesión</button>
             </form>
         </div>
     );
