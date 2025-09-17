@@ -3,6 +3,7 @@ import { BrowserRouter,Routes,Route, Navigate } from "react-router";
 import Login from './pages/login.jsx'
 import { CreateUser } from './pages/CreateUser.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import { Home } from './pages/Home.jsx';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('Token');
@@ -40,7 +41,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomeRoute />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={
           <PublicRoute>
             <Login />
