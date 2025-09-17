@@ -65,3 +65,39 @@ export async function crearBootcamp(authToken, bootcampData) {
         throw error;
     }
 }
+
+// Obtener bootcamp por el ID
+export async function obtenerBootcampPorId(authToken, id) {
+    try {
+        const response = await axios.get(`${API_URL}/auth/bootcamps/all`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        });
+        if (response.status === 200) {
+            const bootcamps = response.data;
+            return bootcamps.find(b => b.id === parseInt(id));
+        } else {
+            throw new Error(`Error al obtener bootcamp: ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error("Error al obtener bootcamp por ID:", error);
+        throw error;
+    }
+}
+
+//Eliminar bootcamp por el ID (soft delete -> "active": false)
+export async function eliminarBootcamp(authToken, id) {
+    try {
+        const response = await axios.delete(`${API_URL}/auth/bootcamps/delete/${id}`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar bootcamp:", error.response || error.message);
+        throw error;
+    }
+}
+
