@@ -1,8 +1,24 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+#root{
+  display: flex;
+}
+
+/* Dark form placeholder styling */
+.form-control::placeholder {
+  color: #888888 !important;
+  opacity: 1;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #888888 !important;
+}
+
+.form-control::-moz-placeholder {
+  color: #888888 !important;
+  opacity: 1;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #888888 !important;
 }
 
 .logo {

@@ -12,7 +12,10 @@ export const Home = () => {
     return <div className="container mt-5">
       <h1 className="text-center">Bienvenido a la plataforma de Bootcamps</h1>
       <p className="text-center">Por favor, inicie sesión para ver los bootcamps disponibles.</p>
-      <a href="/login" className="btn btn-primary">Iniciar sesión</a>
+      <div className="text-center">
+        <a href="/login" className="btn btn-primary me-3">Iniciar sesión</a>
+        <a href="/register" className="btn btn-outline-primary">Registrarse</a>
+      </div>
     </div>
   }
 

@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {registrarUsuario} from "../services/RestServices.js";
 
 export function CreateUser() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm();
+    const [passwordsMatch, setPasswordsMatch] = useState(false);
+    const password = watch("password");
+    const confirmPassword = watch("confirmPassword");
+
+    React.useEffect(() => {
+        if (password && confirmPassword) {
+            setPasswordsMatch(password === confirmPassword);
+        } else {
+            setPasswordsMatch(false);
+        }
+    }, [password, confirmPassword]);
 
     async function onSubmit(data) {
         try {
@@ -18,36 +29,116 @@ export function CreateUser() {
         }
     }
 
+    const getInputClassName = (fieldName) => {
+        let baseClass = "form-control text-white";
+        if (errors[fieldName]) return baseClass + " is-invalid";
+        if (fieldName === 'confirmPassword' && confirmPassword && password) {
+            return passwordsMatch ? baseClass + " is-valid" : baseClass + " is-invalid";
+        }
+        if (fieldName === 'password' && password && password.length >= 6) {
+            return baseClass + " is-valid";
+        }
+        return baseClass;
+    };
+
+    const isFormValid = password && confirmPassword && passwordsMatch && password.length >= 6;
+
     return (
-        <div>
-            <h2>Crear Usuario</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label htmlFor="username">Usuario</label>
-                    <input
-                        type="text"
-                        id="username"
-                        {...register("username", {
-                            required: "El usuario es requerido",
-                            minLength: { value: 3, message: "El usuario debe tener al menos 3 caracteres" }
-                        })}
-                    />
-                    {errors.username && <span style={{color: 'red'}}>{errors.username.message}</span>}
+        <div className="min-vh-100 bg-dark d-flex align-items-center justify-content-center p-4 flex-fill" style={{minWidth: '50vw', backgroundColor: '#1a1a1a'}}>
+            <div className="w-100" style={{maxWidth: '420px'}}>
+                <div className="d-flex justify-content-between align-items-center mb-5">
+                    <div className="d-flex align-items-center text-white fw-semibold" style={{fontSize: '18px'}}>
+                        Kodigo Platform
+                    </div>
+                    <a href="/login" className="text-white text-decoration-none" style={{fontSize: '14px'}}>Iniciar Sesión</a>
                 </div>
-                <div>
-                    <label htmlFor="password">Contraseña</label>
-                    <input
-                        type="password"
-                        id="password"
-                        {...register("password", {
-                            required: "La contraseña es requerida",
-                            minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" }
-                        })}
-                    />
-                    {errors.password && <span style={{color: 'red'}}>{errors.password.message}</span>}
-                </div>
-                <button type="submit">Crear Usuario</button>
-            </form>
+
+                <h1 className="text-white text-center fw-semibold mb-2" style={{fontSize: '24px'}}>Crear una cuenta</h1>
+                <p className="text-center mb-4" style={{color: '#888888', fontSize: '14px'}}>Ingresa tu información para crear tu cuenta</p>
+
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            placeholder="Usuario"
+                            className={getInputClassName('username')}
+                            style={{
+                                backgroundColor: '#2a2a2a',
+                                border: '1px solid #3a3a3a',
+                                borderRadius: '6px',
+                                padding: '12px 16px',
+                                '--bs-form-control-color': '#ffffff'
+                            }}
+                            {...register("username", {
+                                required: "El usuario es requerido",
+                                minLength: { value: 3, message: "El usuario debe tener al menos 3 caracteres" }
+                            })}
+                        />
+                        {errors.username && <div className="text-danger mt-1" style={{fontSize: '12px'}}>{errors.username.message}</div>}
+                    </div>
+
+                    <div className="mb-3">
+                        <input
+                            type="password"
+                            placeholder="Contraseña"
+                            className={getInputClassName('password')}
+                            style={{
+                                backgroundColor: '#2a2a2a',
+                                border: '1px solid #3a3a3a',
+                                borderRadius: '6px',
+                                padding: '12px 16px',
+                                '--bs-form-control-color': '#ffffff'
+                            }}
+                            {...register("password", {
+                                required: "La contraseña es requerida",
+                                minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" }
+                            })}
+                        />
+                        {errors.password && <div className="text-danger mt-1" style={{fontSize: '12px'}}>{errors.password.message}</div>}
+                        {!errors.password && password && password.length < 6 && (
+                            <div className="mt-1" style={{fontSize: '12px', color: '#888888'}}>La contraseña debe tener al menos 6 caracteres</div>
+                        )}
+                        {!errors.password && password && password.length >= 6 && (
+                            <div className="text-success mt-1" style={{fontSize: '12px'}}>✓ La contraseña cumple los requisitos</div>
+                        )}
+                    </div>
+
+                    <div className="mb-4">
+                        <input
+                            type="password"
+                            placeholder="Confirmar Contraseña"
+                            className={getInputClassName('confirmPassword')}
+                            style={{
+                                backgroundColor: '#2a2a2a',
+                                border: '1px solid #3a3a3a',
+                                borderRadius: '6px',
+                                padding: '12px 16px',
+                                '--bs-form-control-color': '#ffffff'
+                            }}
+                            {...register("confirmPassword", {
+                                required: "Por favor confirma tu contraseña",
+                                validate: value => value === password || "Las contraseñas no coinciden"
+                            })}
+                        />
+                        {errors.confirmPassword && <div className="text-danger mt-1" style={{fontSize: '12px'}}>{errors.confirmPassword.message}</div>}
+                        {!errors.confirmPassword && confirmPassword && password && (
+                            passwordsMatch ?
+                            <div className="text-success mt-1" style={{fontSize: '12px'}}>✓ Las contraseñas coinciden</div> :
+                            <div className="text-danger mt-1" style={{fontSize: '12px'}}>Las contraseñas no coinciden</div>
+                        )}
+                    </div>
+
+                    <button
+                        type="submit"
+                        className={`btn w-100 fw-medium mb-4 ${isFormValid ? 'btn-light' : 'btn-secondary'}`}
+                        style={{padding: '12px 16px'}}
+                        disabled={!isFormValid}
+                    >
+                        Registrarse
+                    </button>
+                </form>
+
+            </div>
         </div>
     );
 }
