@@ -1,9 +1,10 @@
 import './App.css'
-import { BrowserRouter,Routes,Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import Login from './pages/login.jsx'
 import { CreateUser } from './pages/CreateUser.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import { Home } from './pages/Home.jsx';
+import BootcampDetail from './pages/BootcampDetail.jsx';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('Token');
@@ -55,6 +56,17 @@ function App() {
         <Route path='/dashboard' element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        } />
+        {/*Ruta para visualizar los bootcamps*/}
+        <Route path='/bootcamps' element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } />
+        <Route path='/bootcamp/:id' element={
+          <ProtectedRoute>
+            <BootcampDetail />
           </ProtectedRoute>
         } />
       </Routes>
