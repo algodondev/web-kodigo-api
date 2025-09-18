@@ -5,22 +5,11 @@ import { AddBootcamp } from "./AddBootcamp.jsx";
 
 
 export const Home = () => {
-
-  // Verificar si hay token en el localStorage
-  const token = localStorage.getItem("Token");
-  if (token === null) {
-    return <div className="container mt-5">
-      <h1 className="text-center">Bienvenido a la plataforma de Bootcamps</h1>
-      <p className="text-center">Por favor, inicie sesión para ver los bootcamps disponibles.</p>
-      <div className="text-center">
-        <a href="/login" className="btn btn-primary me-3">Iniciar sesión</a>
-        <a href="/register" className="btn btn-outline-primary">Registrarse</a>
-      </div>
-    </div>
-  }
-
   // Estado para almacenar los bootcamps
   const [bootcampsArray, setBootcamps] = useState([]);
+
+  // Obtener token del localStorage
+  const token = localStorage.getItem("Token");
 
   // Función para obtener los bootcamps desde el backend
   const fetchBootcamps = async () => {
