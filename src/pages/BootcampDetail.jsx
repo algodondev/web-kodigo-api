@@ -112,6 +112,7 @@ function BootcampDetail() {
                 onBootcampCreated={fetchBootcamp}
                 editBootcamp={editBootcamp}
                 setEditBootcamp={setEditBootcamp}
+                hideButton={true}
             />
         </div>
     );

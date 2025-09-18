@@ -34,14 +34,20 @@ export const Home = () => {
 
 
   return (
-    <div className="container mt-5">
-      <AddBootcamp
-        authToken={token}
-        onBootcampCreated={fetchBootcamps}
-      />
-      <Cards
-        bootcamps={bootcampsArray}
-      />
+    <div className="container-fluid py-5">
+      <div className="container">
+        <div className="text-center mb-5">
+          <h1 className="display-4 fw-bold text-primary mb-3">Bootcamps Disponibles</h1>
+          <p className="lead text-muted">Descubre nuestros programas de formación intensiva</p>
+          <AddBootcamp
+            authToken={token}
+            onBootcampCreated={fetchBootcamps}
+          />
+        </div>
+        <Cards
+          bootcamps={bootcampsArray}
+        />
+      </div>
     </div>
   )
 }

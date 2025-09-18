@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { useState, useEffect } from "react";
 import { crearBootcamp, actualizarBootcamp } from "../services/BootcampApi";
 
-export const AddBootcamp = ({ authToken, onBootcampCreated, editBootcamp, setEditBootcamp }) => {
+export const AddBootcamp = ({ authToken, onBootcampCreated, editBootcamp, setEditBootcamp, hideButton = false }) => {
 
     // Si no hay token, no mostrar el formulario
     if (!authToken) {
@@ -89,7 +89,12 @@ export const AddBootcamp = ({ authToken, onBootcampCreated, editBootcamp, setEdi
 
     return (
         <div>
-            <a className="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar Bootcamp</a>
+            {!hideButton && (
+                <button className="btn btn-primary btn-lg px-4 py-2 rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i className="bi bi-plus-circle me-2"></i>
+                    Agregar Bootcamp
+                </button>
+            )}
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">

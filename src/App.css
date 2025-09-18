@@ -56,3 +56,13 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Hover effect for bootcamp cards */
+.hover-card {
+  transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
