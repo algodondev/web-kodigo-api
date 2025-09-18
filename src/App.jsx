@@ -87,7 +87,7 @@ function App() {
     <BrowserRouter>
       <BodyStyleManager />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={
           <PublicRoute>
             <Login />
