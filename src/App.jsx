@@ -87,7 +87,7 @@ function App() {
     <BrowserRouter>
       <BodyStyleManager />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Navigate to={localStorage.getItem('Token') ? '/dashboard' : '/login'} replace />} />
         <Route path="/login" element={
           <PublicRoute>
             <Login />
