@@ -6,6 +6,7 @@ import { CreateUser } from './pages/CreateUser.jsx';
 import { Home } from './pages/Home.jsx';
 import BootcampDetail from './pages/BootcampDetail.jsx';
 import { verificarAutenticacion } from './services/RestServices.js';
+import Navbar from './components/Navbar.jsx';
 
 function ProtectedRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // null = loading
@@ -36,7 +37,12 @@ function ProtectedRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
 }
 
 function PublicRoute({ children }) {
