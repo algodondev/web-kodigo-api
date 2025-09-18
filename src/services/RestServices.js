@@ -2,7 +2,7 @@
 rest  servicios para la api de bootcamps 
 */
 import axios from 'axios';
-import {tokens, bootcamps } from '../models/ModelApi.js';
+import {tokens } from '../models/ModelApi.js';
 const API_URL = "http://localhost:3000/api"
 
 

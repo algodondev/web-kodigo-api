@@ -101,3 +101,39 @@ export async function eliminarBootcamp(authToken, id) {
     }
 }
 
+/*
+Actualizar un bootcamp
+URL: /api/auth/bootcamps/update/:id
+Metodo: PUT
+Autenticación: Bearer Token
+Descripción: Actualiza un bootcamp existente por su ID.
+** Body **:
+{
+  "name": "nuevo nombre",
+  "description": "nueva Descripción",
+  "technologies": ["nueva tecnología"]
+}
+Respuestas: 200: Bootcamp actualizado correctamente. 404: Bootcamp no encontrado.
+*/
+
+// Actualizar un bootcamp existente
+export async function actualizarBootcamp(authToken, id, bootcampData) {
+    try {
+        const response = await axios.put(`${API_URL}/auth/bootcamps/update/${id}`, bootcampData, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.status === 200) {
+            console.log("Respuesta del servidor:", response.data.message || "Bootcamp actualizado");
+            return response.data;
+        } else {
+            throw new Error(`Error al actualizar bootcamp: ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error("Error al actualizar bootcamp:", error);
+        throw error;
+    }
+}
+

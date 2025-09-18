@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
-import { useState } from "react";
-import { crearBootcamp } from "../services/BootcampApi";
+import { useState, useEffect } from "react";
+import { crearBootcamp, actualizarBootcamp } from "../services/BootcampApi";
 
-export const AddBootcamp = ({ authToken, onBootcampCreated }) => {
+export const AddBootcamp = ({ authToken, onBootcampCreated, editBootcamp, setEditBootcamp }) => {
 
     // Si no hay token, no mostrar el formulario
     if (!authToken) {
@@ -10,10 +10,25 @@ export const AddBootcamp = ({ authToken, onBootcampCreated }) => {
     }
 
     // Configuración de react-hook-form y estados para tecnologías
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
     const [techList, setTechList] = useState([]);
     const [techInput, setTechInput] = useState("");
     const [techError, setTechError] = useState("");
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    // Efecto para cargar datos cuando se está editando
+    useEffect(() => {
+        if (editBootcamp) {
+            setIsEditMode(true);
+            setValue('name', editBootcamp.name);
+            setValue('description', editBootcamp.description);
+            setTechList(editBootcamp.technologies || []);
+        } else {
+            setIsEditMode(false);
+            reset();
+            setTechList([]);
+        }
+    }, [editBootcamp, setValue, reset]);
 
     // Función para agregar y eliminar tecnologías
     const addTechnology = () => {
@@ -29,18 +44,29 @@ export const AddBootcamp = ({ authToken, onBootcampCreated }) => {
         setTechList(techList.filter((_, i) => i !== index));
     };
 
-    // Función para enviar el bootcamp al backend
+    // Función para enviar el bootcamp al backend (crear o actualizar)
     const postBootcamp = async (token, bootcampData) => {
         try {
-            const responseApi = await crearBootcamp(token, bootcampData);
+            let responseApi;
+            if (isEditMode && editBootcamp) {
+                responseApi = await actualizarBootcamp(token, editBootcamp.id, bootcampData);
+            } else {
+                responseApi = await crearBootcamp(token, bootcampData);
+            }
 
             if (onBootcampCreated) {
                 onBootcampCreated();
             }
+
+            // Limpiar el modo de edición
+            if (setEditBootcamp) {
+                setEditBootcamp(null);
+            }
+
             document.querySelector('#exampleModal .btn-close').click();
 
         } catch (error) {
-            console.error("Error al agregar el bootcamp", error);
+            console.error(`Error al ${isEditMode ? 'actualizar' : 'agregar'} el bootcamp`, error);
             if (error.response?.status === 401) {
                 alert("Tu sesión expiró. Por favor, inicia sesión de nuevo.");
                 window.location.href = "/login";
@@ -68,8 +94,10 @@ export const AddBootcamp = ({ authToken, onBootcampCreated }) => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Agregar un nuevo Bootcamp</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">
+                                {isEditMode ? 'Editar Bootcamp' : 'Agregar un nuevo Bootcamp'}
+                            </h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setEditBootcamp && setEditBootcamp(null)}></button>
                         </div>
 
                         {/* Formulario para agregar bootcamp */}
@@ -104,8 +132,10 @@ export const AddBootcamp = ({ authToken, onBootcampCreated }) => {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" className="btn btn-primary">Guardar</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => setEditBootcamp && setEditBootcamp(null)}>Cerrar</button>
+                                <button type="submit" className="btn btn-primary">
+                                    {isEditMode ? 'Actualizar' : 'Guardar'}
+                                </button>
                             </div>
                         </form>
                         

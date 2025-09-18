@@ -35,8 +35,13 @@ export const Home = () => {
 
   return (
     <div className="container mt-5">
-      <AddBootcamp authToken={token} onBootcampCreated={fetchBootcamps} />
-      <Cards bootcamps={bootcampsArray} />
+      <AddBootcamp
+        authToken={token}
+        onBootcampCreated={fetchBootcamps}
+      />
+      <Cards
+        bootcamps={bootcampsArray}
+      />
     </div>
   )
 }

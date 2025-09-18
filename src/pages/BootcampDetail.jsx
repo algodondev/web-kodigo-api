@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import { obtenerBootcampPorId, eliminarBootcamp } from "../services/BootcampApi";
 import { useNavigate } from "react-router";
+import { AddBootcamp } from "./AddBootcamp.jsx";
 
 function BootcampDetail() {
     const { id } = useParams();
     const [bootcamp, setBootcamp] = useState(null);
+    const [editBootcamp, setEditBootcamp] = useState(null);
     const token = localStorage.getItem("Token");
     const navigate = useNavigate();
 
@@ -14,24 +16,29 @@ function BootcampDetail() {
             try {
                 await eliminarBootcamp(token, id);
                 alert("Bootcamp eliminado con éxito");
-                navigate("/bootcamps");
+                navigate("/dashboard");
             } catch (error) {
                 alert("No se pudo eliminar el bootcamp");
             }
         }
     };
 
+    const fetchBootcamp = async () => {
+        try {
+            const data = await obtenerBootcampPorId(token, id);
+            setBootcamp(data);
+        } catch (error) {
+            console.error("Error cargando bootcamp:", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchBootcamp = async () => {
-            try {
-                const data = await obtenerBootcampPorId(token, id);
-                setBootcamp(data);
-            } catch (error) {
-                console.error("Error cargando bootcamp:", error);
-            }
-        };
         fetchBootcamp();
     }, [id]);
+
+    const handleEditBootcamp = () => {
+        setEditBootcamp(bootcamp);
+    };
 
     if (!bootcamp) {
         return (
@@ -80,15 +87,32 @@ function BootcampDetail() {
 
                     {/*Buttons*/}
                     <div className="mt-5 d-flex justify-content-between">
-                        <Link to="/bootcamps" className="btn btn-outline-secondary">
+                        <Link to="/dashboard" className="btn btn-outline-secondary">
                             Volver
                         </Link>
-                        <button onClick={handleDelete} className="btn btn-danger">
-                            Eliminar
-                        </button>
+                        <div className="d-flex gap-2">
+                            <button
+                                onClick={handleEditBootcamp}
+                                className="btn btn-warning"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
+                                Editar
+                            </button>
+                            <button onClick={handleDelete} className="btn btn-danger">
+                                Eliminar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* Modal para editar bootcamp */}
+            <AddBootcamp
+                authToken={token}
+                onBootcampCreated={fetchBootcamp}
+                editBootcamp={editBootcamp}
+                setEditBootcamp={setEditBootcamp}
+            />
         </div>
     );
 }
