@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router";
 import { useEffect, useState } from 'react';
 import Login from './pages/login.jsx'
 import { CreateUser } from './pages/CreateUser.jsx';
@@ -56,11 +56,36 @@ function PublicRoute({ children }) {
 }
 
 
+// Component to handle body styles based on route
+function BodyStyleManager() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const isAuthRoute = location.pathname === '/login' || location.pathname === '/register';
+
+    if (isAuthRoute) {
+      // Remove justify-content: center for auth routes
+      document.body.style.justifyContent = 'flex-start';
+    } else {
+      // Restore justify-content: center for other routes
+      document.body.style.justifyContent = 'center';
+    }
+
+    // Cleanup function to reset when component unmounts
+    return () => {
+      document.body.style.justifyContent = 'center';
+    };
+  }, [location.pathname]);
+
+  return null;
+}
+
 function App() {
 
   /// routerdom react
   return (
     <BrowserRouter>
+      <BodyStyleManager />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={

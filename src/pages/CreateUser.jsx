@@ -30,7 +30,7 @@ export function CreateUser() {
     }
 
     const getInputClassName = (fieldName) => {
-        let baseClass = "form-control text-white";
+        let baseClass = "form-control";
         if (errors[fieldName]) return baseClass + " is-invalid";
         if (fieldName === 'confirmPassword' && confirmPassword && password) {
             return passwordsMatch ? baseClass + " is-valid" : baseClass + " is-invalid";
@@ -44,17 +44,17 @@ export function CreateUser() {
     const isFormValid = password && confirmPassword && passwordsMatch && password.length >= 6;
 
     return (
-        <div className="min-vh-100 bg-dark d-flex align-items-center justify-content-center p-4 flex-fill" style={{minWidth: '50vw', backgroundColor: '#1a1a1a'}}>
+        <div className="min-vh-100 d-flex align-items-center justify-content-center p-4 flex-fill" style={{minWidth: '50vw', backgroundColor: '#f8f9fa'}}>
             <div className="w-100" style={{maxWidth: '420px'}}>
                 <div className="d-flex justify-content-between align-items-center mb-5">
-                    <div className="d-flex align-items-center text-white fw-semibold" style={{fontSize: '18px'}}>
+                    <div className="d-flex align-items-center text-dark fw-semibold" style={{fontSize: '18px'}}>
                         Kodigo Platform
                     </div>
-                    <a href="/login" className="text-white text-decoration-none" style={{fontSize: '14px'}}>Iniciar Sesión</a>
+                    <a href="/login" className="text-dark text-decoration-none" style={{fontSize: '14px'}}>Iniciar Sesión</a>
                 </div>
 
-                <h1 className="text-white text-center fw-semibold mb-2" style={{fontSize: '24px'}}>Crear una cuenta</h1>
-                <p className="text-center mb-4" style={{color: '#888888', fontSize: '14px'}}>Ingresa tu información para crear tu cuenta</p>
+                <h1 className="text-dark text-center fw-semibold mb-2" style={{fontSize: '24px'}}>Crear una cuenta</h1>
+                <p className="text-center mb-4 text-muted" style={{fontSize: '14px'}}>Ingresa tu información para crear tu cuenta</p>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-3">
@@ -63,11 +63,10 @@ export function CreateUser() {
                             placeholder="Usuario"
                             className={getInputClassName('username')}
                             style={{
-                                backgroundColor: '#2a2a2a',
-                                border: '1px solid #3a3a3a',
+                                backgroundColor: 'white',
+                                border: '1px solid #dee2e6',
                                 borderRadius: '6px',
-                                padding: '12px 16px',
-                                '--bs-form-control-color': '#ffffff'
+                                padding: '12px 16px'
                             }}
                             {...register("username", {
                                 required: "El usuario es requerido",
@@ -83,11 +82,10 @@ export function CreateUser() {
                             placeholder="Contraseña"
                             className={getInputClassName('password')}
                             style={{
-                                backgroundColor: '#2a2a2a',
-                                border: '1px solid #3a3a3a',
+                                backgroundColor: 'white',
+                                border: '1px solid #dee2e6',
                                 borderRadius: '6px',
-                                padding: '12px 16px',
-                                '--bs-form-control-color': '#ffffff'
+                                padding: '12px 16px'
                             }}
                             {...register("password", {
                                 required: "La contraseña es requerida",
@@ -96,7 +94,7 @@ export function CreateUser() {
                         />
                         {errors.password && <div className="text-danger mt-1" style={{fontSize: '12px'}}>{errors.password.message}</div>}
                         {!errors.password && password && password.length < 6 && (
-                            <div className="mt-1" style={{fontSize: '12px', color: '#888888'}}>La contraseña debe tener al menos 6 caracteres</div>
+                            <div className="mt-1 text-muted" style={{fontSize: '12px'}}>La contraseña debe tener al menos 6 caracteres</div>
                         )}
                         {!errors.password && password && password.length >= 6 && (
                             <div className="text-success mt-1" style={{fontSize: '12px'}}>✓ La contraseña cumple los requisitos</div>
@@ -109,11 +107,10 @@ export function CreateUser() {
                             placeholder="Confirmar Contraseña"
                             className={getInputClassName('confirmPassword')}
                             style={{
-                                backgroundColor: '#2a2a2a',
-                                border: '1px solid #3a3a3a',
+                                backgroundColor: 'white',
+                                border: '1px solid #dee2e6',
                                 borderRadius: '6px',
-                                padding: '12px 16px',
-                                '--bs-form-control-color': '#ffffff'
+                                padding: '12px 16px'
                             }}
                             {...register("confirmPassword", {
                                 required: "Por favor confirma tu contraseña",
@@ -130,7 +127,7 @@ export function CreateUser() {
 
                     <button
                         type="submit"
-                        className={`btn w-100 fw-medium mb-4 ${isFormValid ? 'btn-light' : 'btn-secondary'}`}
+                        className={`btn w-100 fw-medium mb-4 ${isFormValid ? 'btn-primary' : 'btn-secondary'}`}
                         style={{padding: '12px 16px'}}
                         disabled={!isFormValid}
                     >
